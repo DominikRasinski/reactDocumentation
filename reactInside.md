@@ -26,7 +26,7 @@ Komponent posiada kilka faz kiedy jest dodawany do drzewa aplikacji o to jakie f
 3. `React Element` - faza kiedy funkcja komponentu zostaje przetłumaczona z JSX na React Element. React Element jest opisem UI który zostanie przekazany do kolejnej fazy.
 4. `DOM Element (HTML)` - faza DOM Element to faza w której React Element zostaje skonwertowany na HTML i wstawiony do DOM.
 
-![Komponent w React](./docsImage/reactKomponent.png)
+![Komponent w React](./img/reactKomponent.png)
 
 ---
 
@@ -43,7 +43,7 @@ Proces renderowania jest wywoływany dla całej aplikacji, w praktyce wygląda t
 
 Renderowanie zachodzi asynchronicznie, dzięki czemu główny wątek aplikacji nie zostaje zapchany przez nad mierne wykorzystanie procesora.
 
-![Faza render](./docsImage/renderPhase.png)
+![Faza render](./img/renderPhase.png)
 
 ---
 
@@ -59,7 +59,7 @@ Faza commit to faza w której React po uzyskaniu informacji jak powinien wygląd
 6. Zaktualizowanie drzewa Fiber
 7. Zwrócenie listy zmian jakie zaszły w DOM i wprowadzenie ich.
 
-![Faza Commit](./docsImage/commitPhase.png)
+![Faza Commit](./img/commitPhase.png)
 
 ---
 
