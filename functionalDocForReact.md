@@ -455,6 +455,23 @@ Błąd hydracji może nastąpić w momencie gdy nasz element jaki renderujemy po
 
 Więcej przykładów można znaleźć tutaj: https://nextjs.org/docs/messages/react-hydration-error
 
+## Server Actions
+
+Są to asynchroniczne funkcje które działają tylko i wyłącznie na serwerze, umożliwiające nam na edytowanie danych po stronie serwera.
+Akcje serwerowe tworzy się za pomocą `use server` na samej górze funkcji albo całego modułu.
+
+> `use server` jest specjalnie stworzoną dyrektywą, działająca tylko do tworzenia akcji serwerowych, jej działanie jest takie, że umożliwia klintowi na komunikację się z serwerem poprzez zdefioniowane akcje serwerowe.
+
+Server Actions
+
+- Można zdefiniować jako asynchroniczną funkcję działającą wewnątrz komponentu albo może zostać przekazana do klienckiego komponentu.
+- W odzielnym pliku, poczym eksportowane funkcje będą zaimportowane do serwerowego komponentu działają jako akcję serwera.
+
+Działanie:
+
+Next.js tworzy API endpoint dla każdej zdefiniowanej akcji serwerowej. W każdym przypadku kiedy akcja jest wywoływana, to jest tworzone zapytanie za pomocą metody POST.
+Funkcja odpowiadająca za daną akcję na serwerze nigdy nie trafia do klienta. Ponieważ w jej wywołaniu pośredniczy API obsłużone przez Next.js
+
 ## Problemy
 
 ### Stale state
