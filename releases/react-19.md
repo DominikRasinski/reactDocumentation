@@ -70,7 +70,7 @@ const [error, submitAction, isPending] = useActionState(
     // handle success
     return null;
   },
-  null,
+  null
 );
 ```
 
@@ -79,7 +79,7 @@ Mechanizm działa ze względu na kompozycję akcji.
 
 Działanie: opakowana `Akcja` jak zostanie wywołana to hook `useActionState` zwróci ostatnią wartość `akcji` jako dane, a gdy `akcja` będzie nadal w fazie oczekiwania to hook zwróci również wartość `pending`.
 
-## React DOM: `<form>` Actions
+### React DOM: `<form>` Actions
 
 Formularze w wersji React 19 wspierają bezpośrednio możliwość przekazywania funkcji jako `akcji` jako prop dla elementów `<form>`, `<input>` i `<button>` aby skorzystać z wysyłania formularza razem z akcją możemy zapisać formularz w następujący sposób:
 
@@ -92,33 +92,38 @@ W momencie kiedy `Akcja` formularza zostanie wykonana w poprawny sposób to Reac
 
 Możliwe jest zresetowanie formularza manualnie za pomocą `requestFormReset`.
 
-## React DOM: Hook useFormStatus
+### React DOM: Hook useFormStatus
 
 Hook `useFormStatus` jest providerem pozwalającym za subskrybować jego context. Działa podobnie do hooka `useContext` tyle, że `useFormStatus` został zaprojektowany specjalnie do wykorzystania wraz z formularzami.
 
 ```tsx
-import {useFormStatus} from 'react-dom';
+import { useFormStatus } from 'react-dom';
 
 function DesignButton() {
-  const {pending} = useFormStatus();
-  return <button type="submit" disabled={pending} />
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type='submit'
+      disabled={pending}
+    />
+  );
 }
 ```
 
 Działanie:
 `useFormStatus` czyta aktualny status rodzica elementu `<form>`
 
-## Hook useOptimistic
+### Hook useOptimistic
 
 Aby usprawnić obsłużenie powtarzającego się wzorca UI, który polega na przedstawieniu już zmienionych danych podczas gdy odpowiedź z API/Serwera jeszcze nie została przetworzona.
 Możemy stworzyć makietę danych za pomocą nowego hooka `useOptimistic`
 
 ```tsx
-function ChangeName({currentName, onUpdateName}) {
+function ChangeName({ currentName, onUpdateName }) {
   const [optimisticName, setOptimisticName] = useOptimistic(currentName);
 
-  const submitAction = async formData => {
-    const newName = formData.get("name");
+  const submitAction = async (formData) => {
+    const newName = formData.get('name');
     setOptimisticName(newName);
     const updatedName = await updateName(newName);
     onUpdateName(updatedName);
@@ -130,8 +135,8 @@ function ChangeName({currentName, onUpdateName}) {
       <p>
         <label>Change Name:</label>
         <input
-          type="text"
-          name="name"
+          type='text'
+          name='name'
           disabled={currentName !== optimisticName}
         />
       </p>
@@ -141,8 +146,97 @@ function ChangeName({currentName, onUpdateName}) {
 ```
 
 Działanie:
-W momencie gdy zapytanie `updateName` jest w procesie hook `useOptimistic` przejmuje dane jakie zostały przekazane przez użytkownika i aktualizuje formularz, pokazując makietę jak będzie wyglądać ostateczny wynik. 
+W momencie gdy zapytanie `updateName` jest w procesie hook `useOptimistic` przejmuje dane jakie zostały przekazane przez użytkownika i aktualizuje formularz, pokazując makietę jak będzie wyglądać ostateczny wynik.
 
 Jeżeli wystąpi jakiś błąd zostanie przywrócona poprzednia wartość.
 
-## API: `use`
+### API: `use`
+
+W wydaniu React 19 można skorzystać z nowego API `use` aby mieć dostęp do odczytu danych podczas renderu.
+
+Przykładem może być odczytywanie obietnic (promise) za pomocą `use`. React w takim wypadku zatrzyma proces renderowania aż do momentu rozwiązania obietnicy.
+
+```tsx
+import { use } from 'react';
+
+function Comments({ commentsPromise }) {
+  // `use` will suspend until the promise resolves.
+  const comments = use(commentsPromise);
+  return comments.map((comment) => <p key={comment.id}>{comment}</p>);
+}
+
+function Page({ commentsPromise }) {
+  // When `use` suspends in Comments,
+  // this Suspense boundary will be shown.
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Comments commentsPromise={commentsPromise} />
+    </Suspense>
+  );
+}
+```
+
+### <span style="color:red">**Uwaga**</span>
+
+`use` nie wspiera obietnic które zostały wytworzene podczas fazy render
+Przy próbie dostania się do obietnicy która została wytworzona w fazie `render`, React zwróci nam taki warning w konsoli:
+
+> A component was suspended by an uncached promise. Creating promises inside a Client Component or hook is not yet supported, except via a Suspense-compatible library or framework.
+
+Aby naprawić taki błąd należy przekazać obietnicę z biblioteki/framoworka opartego na `suspense` do takiego, który obsługuje buforowanie obietnic.
+
+> W przyszłości przerzucnie się pomiędzy bibliotekami ma zostać zastąpione specjalnie do tego przystosowanym rozwiązaniem
+
+---
+
+`Use` może zostać również wykorzystany do czytania `contextu`, pozwala nam to odczytać `Context` warunkowo
+
+```tsx
+import { use } from 'react';
+import ThemeContext from './ThemeContext';
+
+function Heading({ children }) {
+  if (children == null) {
+    return null;
+  }
+
+  // This would not work with useContext
+  // because of the early return.
+  const theme = use(ThemeContext);
+  return <h1 style={{ color: theme.color }}>{children}</h1>;
+}
+```
+
+API `use` może być tylko wywołane w fazie renderu, podobnie jak inne hooki.
+Jednak róznicą `use` od hooków jest to, że może być wywołane warunkowo.
+
+> W przyszłości mają powstać kolejne warunki umożliwiające dostęp danych w fazie render
+
+### React DOM Static APIs
+
+Do Reacta zostały dodane dwa nowe API to `react-dom/static` dla statycznego generowania strony
+
+- `prerender`
+- `prerenderToNodeStream`
+
+Oba wymienione powyżej API poprawiają `renderToString` poprzez czekanie na dane do załadowania w statycznym HTML.
+API zostało zaprojketowane aby działać wraz z środowiskiem jak `Node.js Streams` oraz `Web Streams`
+
+```tsx
+import { prerender } from 'react-dom/static';
+
+async function handler(request) {
+  const { prelude } = await prerender(<App />, {
+    bootstrapScripts: ['/main.js'],
+  });
+  return new Response(prelude, {
+    headers: { 'content-type': 'text/html' },
+  });
+}
+```
+
+`Prerender` API wstępnego renderowania będą czekać na załadowanie wszystkich danych przed zwróceniem statycznego HTML.
+Strumienie można konwertować na ciągi znaków lub wysyłać z odpowiedzią strumieniową.
+Nie obsługują strumieniowego przesyłania zawartości podczas jej ładowania, co jest obsługiwane przez istniejące interfejsy API renderujące serwera React DOM.
+
+### React Server Components
