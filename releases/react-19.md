@@ -240,3 +240,9 @@ Strumienie można konwertować na ciągi znaków lub wysyłać z odpowiedzią st
 Nie obsługują strumieniowego przesyłania zawartości podczas jej ładowania, co jest obsługiwane przez istniejące interfejsy API renderujące serwera React DOM.
 
 ### React Server Components
+
+React teraz ma wsparcie natywne dla Componentów serwerowych, co pozwala na renderowanie komponentów za wczasu, przed budowaniem w środowisku.
+
+Ponieważ jak to serorwe komponentu są budowane od razu na serwerze, przed wysłaniem ich do klienta.
+
+### Server Actions
