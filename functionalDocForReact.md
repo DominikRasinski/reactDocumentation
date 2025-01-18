@@ -229,6 +229,54 @@ Jak działa `useContext`:
 1. Dostarczanie kontekstu: Następnie używasz komponentu Provider, aby dostarczyć wartość kontekstu do drzewa komponentów.
 1. Korzystanie z kontekstu: W końcu używasz hooka useContext, aby uzyskać dostęp do wartości kontekstu w dowolnym komponencie.
 
+Aby skorzystać z hooka `useContext` należy skorzystać `Providera` który umożliwy udostępnienie stanu jaki zostanie przypisany do hooka `useContext`.
+
+Kroki jak zacząć korzystać z hooka `useContext`:
+
+1. Towrzymyu provider który będzie przyjmować stan aktualnej wartości
+
+```tsx
+const NazwaProvidera = createContext(null); // <- ta zmienna będzie przetrzymywać aktualny stan jaki zostanie przekazany do kontekstu
+
+// Przakazanie komponentu do providera aby mial dostep do aktualnego stanu kontekstu
+<NazwaProvidera.Provider value='dowolna_wartość'>
+  <ExampleComponent />
+</NazwaProvidera.Provider>;
+```
+
+2. Wewnątrz każdego komponentu który ma korzystać z kontekstu musimy zdefiniować zmienną o dowolnej nazwiem, do której będzie przypisywany hook `useContext` dla przykładu:
+
+```tsx
+const exampleName = useContext(NazwaProvidera);
+```
+
+Zmienna `exampleName` powinna być zdefiniowana na samej górze każdego komponentu, który ma mieć dostęp stanu jaki przyjmie aktualny stan `Provider'a`.
+Jeżeli rodzić komponentu zostanie wstrzyknięty do `context provider'a` to jego dzieci będzie mieć dostęp do stanu kontekstu, jeżeli będzie chciały skorzystać z jego stanu, będzie właśnie wymaganie zdefiniowanie zmiennej, która będzie przyjmować wartość `useContext(NazwaProvider'a)`
+
+```
+ContextProvider
+
+  ParentComponent
+
+    ChildComponent-1
+    ChildComponent-2
+      GrandChildComponent-1
+    ChildComponent-3
+    ...
+    ChildComponent-n
+
+  ParentComponent
+
+ContextProvider
+```
+
+Każdy z komponentów zawartych w `ParentComponent` będzie posiadać dostęp do wartości udostępnianych poprzez kontekst, oczywiście rodzic również będzie posiadać dostęp.
+Czyli dostęp do kontekstu będą posiadać:
+
+- `ParentComponent`
+- `ChildComponent-n`
+- `GrandChildComponent-n`
+
 ---
 
 ## Wykorzystywane techniki
