@@ -246,3 +246,45 @@ React teraz ma wsparcie natywne dla Componentów serwerowych, co pozwala na rend
 Ponieważ jak to serorwe komponentu są budowane od razu na serwerze, przed wysłaniem ich do klienta.
 
 ### Server Actions
+
+Akcje serwerowe pozwalają komponentonm po stronie klienta wywoływać asynchroniczne funkcje, które są wykonywane po stronie serwera.
+
+Kiedy akcje serwerowa jest zdefiniowana z użyciem dyrektywy `"use server"` framework automatycznie towrzy referencję do akcji serwerowej i przekaże ją do komponentu klienckiego.
+W momencie wywołania funkcji, React wysyła zapytanie do serwera aby serwer uruchomił daną funkjcę oraz zwrócił jej wynik.
+
+### <span style="color:red">**Uwaga**</span>
+
+**Nie istnieje specjalna dyrektywa aby component był po stronie serwera `use server` jest wykorzystywane do tworzenia akcji serwerowych** - React.js
+
+W framework Next.js każdy komponent, który nie posiada żadnej dyretkywy zdefiniowanej na samej górze komponentu automatycznie tworzy taki komponent jako komponent po stronie serwerowej.
+
+Akcje serwerowe mogą być tylko zrobione po stronie komponentu serwerowego i mogą zostać przekazane, za pomocą `props` do kompoentnu klienckiego.
+
+---
+
+## Usprawnienia w React 19
+
+### ref jako prop
+
+W React 19 teraz jest możliwość do dostania się do `ref` jako prop z funkcji komponentu
+
+```tsx
+function MyInput({ placeholder, ref }) {
+  return (
+    <input
+      placeholder={placeholder}
+      ref={ref}
+    />
+  );
+}
+
+//...
+
+<MyInput ref={ref} />;
+```
+
+Dzięki temu zastosowaniu nowe komponentu, nie będę już potrzebowały `forwardRef`.
+
+Aktualnie wykorzystanie `ref` jako `prop` automtycznie zaktualizuje komponenty aby korzystały z aktualnego stanu `ref`.
+
+W przyszłości `forawardRef` będzie poddany wycofaniu.
