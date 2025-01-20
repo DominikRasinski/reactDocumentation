@@ -288,3 +288,15 @@ Dzięki temu zastosowaniu nowe komponentu, nie będę już potrzebowały `forwar
 Aktualnie wykorzystanie `ref` jako `prop` automtycznie zaktualizuje komponenty aby korzystały z aktualnego stanu `ref`.
 
 W przyszłości `forawardRef` będzie poddany wycofaniu.
+
+### `<Context>` jako provider
+
+W wersji React 19 możemy generować `<Context>` jako provider bezpośrednio zamiast wykortzystywać właściwość obiektu `<Context.Provider>`
+
+```tsx
+const ThemeContext = createContext('');
+
+function App({ children }) {
+  return <ThemeContext value='dark'>{children}</ThemeContext>;
+}
+```
