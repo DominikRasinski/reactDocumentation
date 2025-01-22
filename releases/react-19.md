@@ -300,3 +300,85 @@ function App({ children }) {
   return <ThemeContext value='dark'>{children}</ThemeContext>;
 }
 ```
+
+### Funckja czyszcząca dla ref
+
+Teraz element `ref` wspiera funkcję czyszczącą
+
+```tsx
+<input
+  ref={(ref) => {
+    // ref created
+
+    // NEW: return a cleanup function to reset
+    // the ref when element is removed from DOM.
+    return () => {
+      // ref cleanup
+    };
+  }}
+/>
+```
+
+W momencie kiedy komponent jest ususuwany z drzewa React, funkcja czyszcząca zostanie zwrócona.
+Działa to dla DOM refs, refs w klasach komponentów oraz `useImperativeHandle`.
+
+Poprzez zaimplementowanie funkcji czysczących wewnątrz `ref` funkcja callback teraz będzie odrzucana poprzez TypeScript.
+Aby rozwiązać ten błąd należy stosować taką składnię:
+
+```tsx
+<div
+  ref={(current) => {
+    instance = current;
+  }}
+/>
+```
+
+### Wartość domyślna dla `useDeferredValue`
+
+Została dodana możliwość dodania warości domyślanej do `useDeferredValue`
+
+```tsx
+function Search({ deferredValue }) {
+  // On initial render the value is ''.
+  // Then a re-render is scheduled with the deferredValue.
+  const value = useDeferredValue(deferredValue, '');
+
+  return <Results query={value} />;
+}
+```
+
+W momencie kiedy wartość domyślna jest przekazana, `useDeferredValue` zwróci ją jako wartość jako wartość domyślna dla renderu komponentu i
+planuje kolejny re-render w tle z `defferedValue`.
+
+### Wsparcie dla Metadanych zawartych w dokumencie
+
+W kodzie `HTML` znaczniki oznaczające metadane takie jak `<title></title>`, `<link>` i `<meta>` są zarezerwowane aby były umieszczane wewnątrz sekcji `<head>` dokumentu.
+W Reactcie komponenty które potrzebują takich znaczników mogą być umieszczone bardzo daleko od sekcji `<head>` lub aplikacja sama w sobie nie posiada takiej sekcji.
+
+Dlatego w wersji 19 została dodana obsługa renderowania znaczników dla metadanych natycwnie:
+
+```tsx
+function BlogPost({ post }) {
+  return (
+    <article>
+      <h1>{post.title}</h1>
+      <title>{post.title}</title>
+      <meta
+        name='author'
+        content='Josh'
+      />
+      <link
+        rel='author'
+        href='https://twitter.com/joshcstory/'
+      />
+      <meta
+        name='keywords'
+        content={post.keywords}
+      />
+      <p>Eee equals em-see-squared...</p>
+    </article>
+  );
+}
+```
+
+### Wsparcie dla stylesheet
