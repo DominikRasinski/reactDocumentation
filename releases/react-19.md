@@ -382,3 +382,6 @@ function BlogPost({ post }) {
 ```
 
 ### Wsparcie dla stylesheet
+
+Stylesheet przed wersją 19 wymagało ostrożnego osadzania w odpowiednim miejscu DOM ze względu na zasady pierwszeństwa stylu.
+Wiązało się to obługi stylków zewnętrznych oraz styli inline.
