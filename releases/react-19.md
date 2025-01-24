@@ -385,3 +385,13 @@ function BlogPost({ post }) {
 
 Stylesheet przed wersją 19 wymagało ostrożnego osadzania w odpowiednim miejscu DOM ze względu na zasady pierwszeństwa stylu.
 Wiązało się to obługi stylków zewnętrznych oraz styli inline.
+
+### Wsparcie dla obsługi skryptów asynchronicznych
+
+Wykorzystanie skryptów wenątrz komponentów takich jak `<script src="...">` `<script defer="" src="...">` `<script async="" src="...">` jest wyzwaniem, ponieważ skrypty ładowane przez tak `<script>` zazwyczaj powinny się znajdować na samej górze dokumentu w headzie aby poprawniue funkcjonowały.
+
+W wersji React 19 została poprawiona obsługa asynchronicznych skryptów pozwalając na zagnieżdżanie ich w dowolnym miejscu drzewa komponentów.
+
+Środowisko React'a dba o to aby skrypty asynchroniczne były deduplikowane co prowadzi do tego, że nie ważne ile będzie kompontów z tym samynm sktyptem to i tak zostanie on tylko raz załadowany.
+
+W komponentach renderowanych po stronie serwera aynchroniczne skrypty będą dodawane do heada.
