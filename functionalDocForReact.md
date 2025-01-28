@@ -51,7 +51,7 @@
 
 Przykład:
 
-```js
+```tsx
 import React, { useState } from 'react';
 
 function Counter() {
@@ -106,7 +106,35 @@ Zapisany stan w hooku `useState` jest zapisywany w momencie renderowania kompone
 UseEffect jest uruchamiany dopiero po renderowaniu komponentu.
 
 UseEffect załącza się po wyświetleniu DOM w przeglądarce, czyli po etapie paint browser
-Tablica zależności w jest bardzo ważnym elementem useEffect, ponieważ dzięki niej udaje się zapanować nad momentem, kiedy useEffect ma zostać odpalony, albo pozwala zaplanować, kiedy dane pobranie danych ma zostać wykonane. "Kiedy" oznacza moment zaktualizowania danej zamiennej albo stanu w komponencie.
+Tablica zależności w jest bardzo ważnym elementem useEffect, ponieważ dzięki niej udaje się zapanować nad momentem, kiedy useEffect ma zostać odpalony, albo pozwala zaplanować, kiedy dane pobranie danych ma zostać wykonane.
+
+```tsx
+import React, { useState, useEffect } from 'react';
+
+const UseEffectExample: React.FC = () => {
+  const [count, setCount] = useState<number>(0);
+
+  useEffect(() => {
+    document.title = `You clicked ${count} times`;
+
+    // funkcja czyszcząca (opcjonalna)
+    return () => {
+      document.title = 'React App';
+    };
+  }, [count]); // tablica zależności
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
+    </div>
+  );
+};
+
+export default UseEffectExample;
+```
+
+Przykład pokazuje użycie hooka `useEffect` pozwalającego na aktulizację tytułu dokumentu za każdym razem gdy zmienia się wartość `count`
 
 ---
 
