@@ -312,7 +312,7 @@ Czyli dostęp do kontekstu będą posiadać:
 > useMemo jest to hook w React.js który pozwala na cachowanie wyników operacji pomiędzy re-renderami.
 
 ```tsx
-const cachedValue = useMemo(calculateValue, dependencies)
+const cachedValue = useMemo(calculateValue, dependencies);
 ```
 
 Aby skorzystać z hook'a `useMemo` należy go zdefiniować na samej górze komponentu
@@ -321,12 +321,18 @@ Aby skorzystać z hook'a `useMemo` należy go zdefiniować na samej górze kompo
 import { useMemo } from 'react';
 
 function TodoList({ todos, tab }) {
-  const visibleTodos = useMemo(
-    () => filterTodos(todos, tab),
-    [todos, tab]
-  );
+  const visibleTodos = useMemo(() => filterTodos(todos, tab), [todos, tab]);
   // ...
 }
+```
+
+### useCallback
+
+> Hook `useCallback` w React.js pozwala nam na cachowanie defionicji funkcji pomiędzy re-renderami
+> Trzeba pamiętać, że nazwa useCallback nie oznacza, że ten hook tworzy funkcję callBack wręcz można powiedzieć, że tworzy w ogóle inny mechanizm ponieważ hook `useCallback` jest wykorzystywany do poprawiania wydajności, poprzez zapisywanie definicji funkcji do pamięci podręcznej
+
+```tsx
+const cachedFn = useCallback(fn, dependencies);
 ```
 
 ## Wykorzystywane techniki
