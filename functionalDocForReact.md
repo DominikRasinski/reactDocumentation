@@ -20,7 +20,7 @@
 - [`useRef`](#useref)
 - [`useReducer`](#usereducer)
 - [`useContext`](#usecontext)
-- useMemo
+- [`useMemo`](#usememo)
 - useCallback
 
 ### Wykorzystywane techniki
@@ -143,7 +143,7 @@ Przykład pokazuje użycie hooka `useEffect` pozwalającego na aktulizację tytu
 Hook useReducer jest bardzo podobny do hooka `useState`, ale umożliwia przeniesienie logiki aktualizacji stanu do pojedynczej funkcji poza komponentem.
 Dzięki temu ułatwia zarządzanie bardziej skomplikowaną logiką stanu w porównaniu do prostych zmian stanu, które można łatwiej obsłużyć za pomocą `useState`
 
-#### Przykładowe użycie `useRecuder`
+#### Przykładowe użycie `useReducer`
 
 ```TSX
 const [state, dispatch] = useReducer(reducer, initialState);
@@ -306,6 +306,28 @@ Czyli dostęp do kontekstu będą posiadać:
 - `GrandChildComponent-n`
 
 ---
+
+### useMemo
+
+> useMemo jest to hook w React.js który pozwala na cachowanie wyników operacji pomiędzy re-renderami.
+
+```tsx
+const cachedValue = useMemo(calculateValue, dependencies)
+```
+
+Aby skorzystać z hook'a `useMemo` należy go zdefiniować na samej górze komponentu
+
+```tsx
+import { useMemo } from 'react';
+
+function TodoList({ todos, tab }) {
+  const visibleTodos = useMemo(
+    () => filterTodos(todos, tab),
+    [todos, tab]
+  );
+  // ...
+}
+```
 
 ## Wykorzystywane techniki
 
