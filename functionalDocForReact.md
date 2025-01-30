@@ -21,7 +21,7 @@
 - [`useReducer`](#usereducer)
 - [`useContext`](#usecontext)
 - [`useMemo`](#usememo)
-- useCallback
+- [`useCallback`](#usecallback)
 
 ### Wykorzystywane techniki
 
@@ -315,6 +315,11 @@ Czyli dostęp do kontekstu będą posiadać:
 const cachedValue = useMemo(calculateValue, dependencies);
 ```
 
+Parametry jakie przyjmuje hook `useMemo`:
+
+- `calculateValue`: Funckja która ma za zadanie zwrócenie wartości, funkcja powinna być `pure` czyli nie powinna posiadać żadnych argumentów i powinna zwracać wartość dowolnego typu. React podczas fazy renderu inicjacyjnego wywoła funkcję `calculateValue`, podczas kolejnego renderu wartość z funkjci będzie ciągle zwraca z pamięci podręcznej póki `dependencies` nie ulegną zmianie. Gdy zależności zostaną zakutalizowane to React od tworzy funckję oraz jej wynik na podstawie nowych danych i zapisze jej nowy wynik w pamięci.
+- `dependencies`: Jest to lista mutowalnych danych które są zawarte wewnątrz funkcji `calculateValue`, mogą to być dla przykładu `props`, `state` oraz każda inna zmienna która może uledz zmianie.
+
 Aby skorzystać z hook'a `useMemo` należy go zdefiniować na samej górze komponentu
 
 ```tsx
@@ -334,6 +339,16 @@ function TodoList({ todos, tab }) {
 ```tsx
 const cachedFn = useCallback(fn, dependencies);
 ```
+
+Parametry jakie przyjmuje hook `useCallback`
+
+- `fn`: Funckja jaka ma zostać zapisana w pamięci podręcznej. Funkcja może przyjmować dowolne argumenty oraz zwracać dowolną liczbę. Funkcja zostanie zwrócona przez React podczas inicjalizowanego renderu. Jeżeli `dependencies` nie ulegną zmianie lub ich status nie zostanie zaktualizowany to React będzie ciągle zwracać te samą funkcję która jest przetrzymywana w pamięci podręcznej. Jeśli `dependencies` ulegną zmianie to podczas aktualnego re-renderu w którym nastąpiła zmina React zwróci nową funkcję `fn` i zostanie zapisana w pamięci podręcznej do ponownego użycia.
+- `dependencies`: Jest to lista mutowalnych danych które są zawarte wewnątrz funkcji `fn` lub funkcjach które funckja `fn` zwraca, mogą to być dla przykładu `props`, `state` oraz każda inna zmienna która może uledz zmianie.
+
+Różnice pomiędzy `useMemo` i `useCallback`
+
+- `useMemo` zapisuje w pamięci podręcznej wynik wywoływanej funkcji
+- `useCallback` zapisuje w pamięci podręcznej całą funkcję
 
 ## Wykorzystywane techniki
 
