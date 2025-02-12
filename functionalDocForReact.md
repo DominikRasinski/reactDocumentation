@@ -398,6 +398,18 @@ Zalecanym sposobem na przekazywanie danych pomiędzy większą ilością kompone
 
 ---
 
+### Context API
+
+Technika wykorzystywana do przekazywania `props` w bardzo elegancki i prosty sposób. Czyli poprzez mechanizm kontekstu, który jest udostępniany przez bibliotekę `React.js` dzięki czemu nie ma potrzeby na wykorzystywanie zewnętrznych rozwiązań do bardziej złożonego zarządzania propami pomiędzy dużą liczbą komponentów.
+
+Jak stworzyć:
+Aby skorzystać z `context API` należy skorzystać z `createContext` aby stworzyć provider kontekstu.
+
+#### Ważne
+Jeżeli korzystamy z zewnętrznych rozwiązań, które również korzystaja z własnego kontekstu musimy zadbać o odpowiedni porządek `Provider->Consumer` bo inaczej będziemy spotykać błedy.
+
+TODO: dodać opis zachowania providera kiedy consumer jest w złym miejscy
+
 ### component-composition
 
 Kompozycja komponentów polega na tym, że nie przekazujemy kolejnych parametrów za pomocą `props` a zamiast tego robimy kompozycję z innego komponentu.\
